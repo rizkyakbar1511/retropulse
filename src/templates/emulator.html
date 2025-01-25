@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Emulator</title>
+  </head>
+  <body>
+    <div style="height: 480px">
+      <div id="game"></div>
+    </div>
+    <script>
+      // Get parameters from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const gameUrl = urlParams.get("gameUrl");
+      const core = urlParams.get("core");
+
+      // EJS_threads = true; <- add it later
+      EJS_player = "#game";
+      EJS_gameUrl = "{{gameUrl}}";
+      EJS_core = "{{core}}";
+      EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
+      EJS_backgroundImage = "{{backgroundImage}}";
+      EJS_backgroundBlur = true;
+    </script>
+    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+  </body>
+</html>

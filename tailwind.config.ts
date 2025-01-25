@@ -9,9 +9,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        muted: "rgba(0, 0, 0, 0.1)",
+        primary: "#272937",
+        main: "#1d1f29",
+        accent: "#36384A",
+        "accent-secondary": "#0A2737",
       },
+      backgroundImage: {
+        "accent-gradient":
+          "linear-gradient(0deg, rgba(254, 137, 31, 1) 0%, rgba(254, 182, 35,1) 100%)",
+      },
+    },
+    fontFamily: {
+      display: "var(--heading-font)",
+      sans: "var(--body-font)",
     },
   },
   plugins: [],
