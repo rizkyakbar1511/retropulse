@@ -37,7 +37,7 @@ export default function CategorySlider({ categories }: { categories: Category[] 
               <div className="overflow-hidden rounded-lg border-accent-secondary border relative h-48 mb-2">
                 <Image
                   className="object-cover transition-transform duration-300 group-hover/categories:scale-105"
-                  src={`/category/${category.image}`}
+                  src={category.image}
                   alt={category.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -40,7 +40,8 @@ model User {
   image         String?
   name          String?
   email         String          @unique
-  password      String
+  emailVerified DateTime?
+  password      String?
   role          String          @default("user")
   accounts      Account[]
   sessions      Session[]

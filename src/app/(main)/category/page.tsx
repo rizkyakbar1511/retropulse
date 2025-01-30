@@ -17,7 +17,7 @@ export default async function CategoryPage() {
             <div className="overflow-hidden rounded-lg border-accent-secondary border mb-2 h-40 relative w-full">
               <Image
                 className="object-cover transition-transform duration-300 group-hover/category:scale-105"
-                src={`/category/${category.image}`}
+                src={category.image}
                 alt={category.title}
                 fill
               />

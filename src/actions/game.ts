@@ -10,6 +10,7 @@ export async function upsertGame(formData: FormData) {
   const slug = formData.get("slug") as string;
   const description = formData.get("description") as string;
   const status = formData.get("status") === "true";
+  const featured = formData.get("featured") === "true";
   const categoryId = formData.get("categoryId") as string;
 
   try {
@@ -31,9 +32,11 @@ export async function upsertGame(formData: FormData) {
         },
       },
       published: status,
+      featured,
       game_url: gameFile,
       image: thumbnail,
     };
+    console.log("🚀 ~ upsertGame ~ gameData:", gameData);
 
     const gameDataUpdate = {
       title,
@@ -45,22 +48,22 @@ export async function upsertGame(formData: FormData) {
         },
       },
       published: status,
+      featured,
       ...(gameFile ? { game_url: gameFile } : {}),
       ...(thumbnail ? { image: thumbnail } : {}),
     };
     console.log("🚀 ~ upsertGame ~ gameDataUpdate:", gameDataUpdate);
 
-    await prisma.game.upsert({
-      create: {
-        ...gameData,
-      },
-      update: {
-        ...gameDataUpdate,
-      },
-      where: {
-        id: parseInt(gameId, 10),
-      },
-    });
+    if (!gameId) {
+      await prisma.game.create({ data: gameData });
+    } else {
+      await prisma.game.update({
+        data: gameDataUpdate,
+        where: {
+          id: parseInt(gameId, 10),
+        },
+      });
+    }
   } catch (error) {
     console.log("🚀 ~ createGame ~ error:", error);
     throw error;

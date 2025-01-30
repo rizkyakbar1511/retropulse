@@ -49,7 +49,7 @@ export default function SidebarNav({ categoryMenu }: SidebarNavProps) {
             >
               <ImageWithFallback
                 className="size-auto"
-                src={`/icons/${category.icon}`}
+                src={category.icon}
                 fallback="/icons/default.svg"
                 alt="Category Icon"
                 width={24}

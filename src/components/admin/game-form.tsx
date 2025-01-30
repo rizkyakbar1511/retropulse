@@ -50,6 +50,7 @@ export default function GameForm({ categories, game }: GameFormProps) {
       description: game?.description || "",
       categoryId: game?.categories[0].id.toString() || "",
       status: game?.published ? "true" : "false",
+      featured: game?.featured ? "true" : "false",
     },
   });
 
@@ -304,6 +305,35 @@ export default function GameForm({ categories, game }: GameFormProps) {
               />
               <label className="text-sm text-slate-400" htmlFor="private">
                 Private
+              </label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h6 className="text-xs text-slate-400">FEATURED</h6>
+          <div className="flex gap-3">
+            <div className="space-x-2">
+              <input
+                {...register("featured")}
+                className="peer/status"
+                id="featured"
+                type="radio"
+                value="true"
+              />
+              <label className="text-sm text-slate-400" htmlFor="featured">
+                Yes
+              </label>
+            </div>
+            <div className="space-x-2">
+              <input
+                {...register("featured")}
+                className="peer/status"
+                id="notFeatured"
+                type="radio"
+                value="false"
+              />
+              <label className="text-sm text-slate-400" htmlFor="notFeatured">
+                No
               </label>
             </div>
           </div>

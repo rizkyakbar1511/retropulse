@@ -5,7 +5,7 @@ export const SWIPER_STYLES = {
   "--swiper-pagination-bullet-inactive-color": "#999999",
   "--swiper-pagination-bullet-size": "0.6em",
   "--swiper-pagination-bullet-horizontal-gap": "6px",
-  "--swiper-theme-color": "#FFF",
+  "--swiper-theme-color": "#FFBA08",
   "--swiper-navigation-size": "24px",
   "--swiper-navigation-sides-offset": "30px",
 } as React.CSSProperties;

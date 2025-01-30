@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import { encode as defaultEncode } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import { compare } from "bcrypt-ts";
 import { signInSchema } from "@/lib/zod";
 import { getUserByEmail } from "@/services/user-service";
@@ -20,16 +21,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    jwt({ token, user, account }) {
-      console.log("🚀 ~ jwt ~ account:", account);
-      console.log("🚀 ~ jwt ~ user:", user);
-      console.log("🚀 ~ jwt ~ token:", token);
+    jwt({ token, account }) {
+      // console.log("🚀 ~ jwt ~ account:", account);
+      // console.log("🚀 ~ jwt ~ user:", user);
+      // console.log("🚀 ~ jwt ~ token:", token);
 
-      if (user) {
-        // User is available during sign-in
-        token.role = user.role;
-        token.image = user.image;
-      }
+      // if (user) {
+      //   // User is available during sign-in
+      //   token.role = user.role;
+      //   token.image = user.image;
+      // }
 
       if (account?.provider === "credentials") {
         token.credentials = true;
@@ -37,12 +38,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return token;
     },
-    session({ session }) {
-      //NOTE: just use this if you want to update the session with jwt instead of databse strategy
-      // session.user.role = token.role as string;
-      // session.user.image = token.image as string;
-      return session;
-    },
+    // session({ session, token }) {
+    //   console.log("🚀 ~ session ~ token:", token);
+    //   console.log("🚀 ~ session ~ session:", session);
+    //   //NOTE: just use this if you want to update the session with jwt instead of databse strategy
+    //   // session.user.role = token.role as string;
+    //   // session.user.image = token.image as string;
+    //   return session;
+    // },
   },
   jwt: {
     encode: async function (params) {
@@ -54,14 +57,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         const createdSession = await adapter?.createSession?.({
-          sessionToken: sessionToken,
+          sessionToken,
           userId: params.token.sub,
           expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         });
 
-        if (!createdSession) {
-          throw new Error("Failed to create session");
-        }
+        if (!createdSession) throw new Error("Failed to create session");
 
         return sessionToken;
       }
@@ -78,19 +79,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { email, password } = await signInSchema.parseAsync(credentials);
         const user = await getUserByEmail(email);
 
-        const isPasswordValid = await compare(password, user.password);
+        const isPasswordValid = await compare(password, user.password!);
 
         if (!isPasswordValid) throw new Error("Invalid password");
 
-        return {
-          id: user.id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          image: user.image,
-        };
+        return user;
+
+        // return {
+        //   id: user.id.toString(),
+        //   name: user.name,
+        //   email: user.email,
+        //   role: user.role,
+        //   image: user.image,
+        // };
       },
     }),
     GitHub,
+    Google,
   ],
 });

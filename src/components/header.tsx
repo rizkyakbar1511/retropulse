@@ -3,12 +3,12 @@ import Link from "next/link";
 import Search from "@/components/search";
 import MobileNav from "@/components/mobile-nav";
 import { ArrowRightEndOnRectangleIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
-import { auth } from "@/auth";
-import UserDropdown from "./UserDropdown";
+import UserDropdown from "@/components/user-dropdown";
+import { getSession } from "@/lib/getSession";
 
 export default async function Header() {
-  const session = await auth();
-  
+  const session = await getSession();
+
   return (
     <header className="px-4 flex h-14 items-center gap-4">
       <Link className="flex items-center gap-2" href="/">

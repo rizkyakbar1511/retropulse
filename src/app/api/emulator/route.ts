@@ -29,10 +29,6 @@ export async function GET(request: NextRequest) {
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html",
-      // "Cross-Origin-Opener-Policy": "same-origin",
-      // "Cross-Origin-Embedder-Policy": "require-corp",
-      // "Cross-Origin-Resource-Policy": "cross-origin",
-      // "Access-Control-Allow-Origin": "*",
     },
   });
 }

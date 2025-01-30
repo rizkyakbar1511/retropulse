@@ -7,8 +7,8 @@ declare module "next-auth" {
   interface Session {
     user: {
       /** The user's postal address. */
-      role?: string;
-      image?: string;
+      role: string;
+      image: string;
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,
@@ -17,17 +17,12 @@ declare module "next-auth" {
        */
     } & DefaultSession["user"];
   }
-
-  interface User {
-    role: string | null;
-    image: string | null;
-  }
 }
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
-    role?: string | null;
-    image?: string | null;
+    role: string | null;
+    image: string | null;
   }
 }

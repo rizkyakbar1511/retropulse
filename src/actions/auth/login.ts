@@ -2,13 +2,15 @@
 
 import { signIn } from "@/auth";
 import { isAdmin } from "@/lib/utils";
+import { signInSchema } from "@/lib/zod";
 import { getUserByEmail } from "@/services/user-service";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-export async function loginAction(prevState: unknown, formData: FormData) {
-  const email = formData.get("email") as string;
-  const password = formData.get("password");
+export async function loginAction(data: z.infer<typeof signInSchema>) {
+  const { email, password } = data;
   let redirectUrl = "/";
+
   try {
     await signIn("credentials", {
       redirect: false,
@@ -32,8 +34,4 @@ export async function loginAction(prevState: unknown, formData: FormData) {
   }
 
   if (redirectUrl) redirect(redirectUrl);
-}
-
-export async function loginWithProviderAction(provider: string) {
-  await signIn(provider);
 }

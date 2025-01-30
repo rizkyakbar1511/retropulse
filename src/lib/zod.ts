@@ -31,6 +31,15 @@ export const baseGameSchema = z.object({
     .refine((value) => value !== null, {
       message: "Status is required", // Custom message for `null`
     }),
+  featured: z
+    .string({ required_error: "Featured is required" })
+    .refine((value) => value === "true" || value === "false", {
+      message: "Featured must be either 'true' or 'false'",
+    })
+    .nullable() // Allow `null` if not selected
+    .refine((value) => value !== null, {
+      message: "Featured is required", // Custom message for `null`
+    }),
   categoryId: z.string({
     required_error: "Category is required",
   }),

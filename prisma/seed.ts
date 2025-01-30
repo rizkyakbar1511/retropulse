@@ -30,49 +30,56 @@ async function seedCategories() {
       id: 1,
       title: "Arcade",
       slug: "arcade",
-      image: "arcade.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207138/retropulse/category/arcade_uxnya7.jpg",
       core: "arcade",
     },
     {
       id: 2,
       title: "Atari",
       slug: "atari",
-      image: "atari.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207138/retropulse/category/atari-2600_ruoheb.jpg",
       core: "atari2600",
     },
     {
       id: 3,
       title: "MAME 2003",
       slug: "mame-2003",
-      image: "mame.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207138/retropulse/category/mame-2003_hfv48t.jpg",
       core: "mame2003",
     },
     {
       id: 4,
       title: "SNES",
       slug: "nes",
-      image: "super-nintendo.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207140/retropulse/category/snes_jgoj99.jpg",
       core: "snes",
     },
     {
       id: 5,
       title: "Nintendo 64",
       slug: "nintendo-64",
-      image: "n64.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207139/retropulse/category/n64_fmbajp.jpg",
       core: "n64",
     },
     {
       id: 6,
       title: "PlayStation",
       slug: "playstation",
-      image: "playstation.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207138/retropulse/category/playstation_b0ppzq.jpg",
       core: "psx",
     },
     {
       id: 7,
       title: "Sega Mega Drive",
       slug: "sega-mega-drive",
-      image: "sega.jpg",
+      image:
+        "https://res.cloudinary.com/dcuyktl8e/image/upload/v1738207139/retropulse/category/sega-md_kt42pm.jpg",
       core: "segaMD",
     },
   ];

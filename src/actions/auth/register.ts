@@ -1,13 +1,13 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { signUpSchema } from "@/lib/zod";
 import { createUser } from "@/services/user-service";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-export async function registerUser(formData: FormData) {
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const password = formData.get("password");
+export async function registerUser(data: z.infer<typeof signUpSchema>) {
+  const { name, email, password } = data;
 
   try {
     await createUser({ name, email, password });

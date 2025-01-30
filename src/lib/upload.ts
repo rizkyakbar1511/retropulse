@@ -1,4 +1,4 @@
-export async function presignS3Url(fileName: string, fileType: string) {
+async function presignS3Url(fileName: string, fileType: string) {
   try {
     const response = await fetch("/api/upload/presigned-url", {
       method: "POST",
