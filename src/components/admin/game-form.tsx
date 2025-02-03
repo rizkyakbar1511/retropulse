@@ -17,10 +17,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createGameSchema, updateGameSchema } from "@/lib/zod";
-import { upsertGame } from "@/actions/game";
+import { deleteGameBySlug, upsertGame } from "@/actions/game";
 import { cn } from "@/lib/utils";
 import { uploadToS3 } from "@/lib/upload";
 import Spinner from "@/components/spinner";
+import { AxiosProgressEvent } from "axios";
+import ProgressBar from "../progress-bar";
+import Radio from "../radio";
+import { deleteS3File } from "@/lib/s3";
 
 interface GameFormProps {
   categories: Category[];
@@ -30,6 +34,11 @@ interface GameFormProps {
 export default function GameForm({ categories, game }: GameFormProps) {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [gameFilePreview, setGameFilePreview] = useState<File | null>(null);
+  const [upload, setUpload] = useState({
+    name: "",
+    isUploading: false,
+    progress: 0,
+  });
   const formRef = useRef<HTMLFormElement | null>(null);
   const router = useRouter();
 
@@ -80,32 +89,62 @@ export default function GameForm({ categories, game }: GameFormProps) {
     trigger(name);
   };
 
+  const onProgressUpload = (progressEvent: AxiosProgressEvent, name: string) => {
+    const { loaded, total } = progressEvent;
+    const percent = Math.floor((loaded * 100) / total!);
+
+    // Update progress percentage (e.g., show in UI)
+    setUpload((prev) => ({ ...prev, name, progress: percent }));
+
+    // Handle edge case where total is 0
+    if (total === 0) {
+      console.info("Total size unknown. Progress unavailable.");
+    }
+  };
+
   const processGameSubmission = async () => {
     const formData = new FormData(formRef.current!);
     const gameThumbnail = formData.get("thumbnail") as File;
     const gameFile = formData.get("gameFile") as File;
 
+    if (gameThumbnail.size > 0 || gameFile.size > 0)
+      setUpload((prev) => ({ ...prev, isUploading: true }));
+
     try {
+      //NOTE: this conditional statement is check whether the game props exists which means in update mode and the file provided then delete old files on S3
+
+      if (game && gameThumbnail.size > 0)
+        await deleteS3File(game.image.split("/").at(-1) as string);
+      if (game && gameFile.size > 0) await deleteS3File(game.game_url.split("/").at(-1) as string);
+
       const [thumbnail, ROM] = await Promise.all([
         ...(gameThumbnail.size > 0
-          ? [await uploadToS3(gameThumbnail, `thumbnails/${gameThumbnail.name}`)]
+          ? [
+              await uploadToS3(gameThumbnail, `thumbnails/${gameThumbnail.name}`, (progressEvent) =>
+                onProgressUpload(progressEvent, "thumbnail")
+              ),
+            ]
           : []),
-        ...(gameFile.size > 0 ? [await uploadToS3(gameFile, `ROMs/${gameFile.name}`)] : []),
+        ...(gameFile.size > 0
+          ? [
+              await uploadToS3(gameFile, `ROMs/${gameFile.name}`, (progressEvent) =>
+                onProgressUpload(progressEvent, "ROM")
+              ),
+            ]
+          : []),
       ]);
 
       formData.set(
         "thumbnail",
         thumbnail
-          ? `https://varied-white-haddock.myfilebase.com/ipfs/${thumbnail.headers.get(
-              "x-amz-meta-cid"
-            )}`
+          ? `https://varied-white-haddock.myfilebase.com/ipfs/${thumbnail.headers["x-amz-meta-cid"]}`
           : ""
       );
 
       formData.set(
         "gameFile",
         ROM
-          ? `https://varied-white-haddock.myfilebase.com/ipfs/${ROM.headers.get("x-amz-meta-cid")}`
+          ? `https://varied-white-haddock.myfilebase.com/ipfs/${ROM.headers["x-amz-meta-cid"]}`
           : ""
       );
 
@@ -116,6 +155,8 @@ export default function GameForm({ categories, game }: GameFormProps) {
       setError("slug", {
         message: (error as Error).message,
       });
+    } finally {
+      setUpload((prev) => ({ ...prev, isUploading: false }));
     }
   };
 
@@ -132,22 +173,39 @@ export default function GameForm({ categories, game }: GameFormProps) {
       className="grid grid-cols-8 gap-4"
     >
       <input {...register("id")} type="hidden" />
-      <div className="col-span-full space-y-4">
+      <div className="relative space-y-4 col-span-full">
         <AnimatePresence>
-          {Object.entries(errors).length && (
+          {upload.isUploading && upload.name && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
-              className="bg-red-100 p-8 flex gap-5 rounded-md relative"
+              transition={{ duration: 0.3 }}
+              className="p-8 space-y-3 border border-yellow-400 rounded-md bg-main"
+            >
+              <h6 className="font-display">Please wait...</h6>
+              <h6 className="font-display">Uploading {upload.name}</h6>
+              <div className="flex items-center gap-2">
+                <ProgressBar progress={upload.progress} />
+                <p>{upload.progress}%</p>
+              </div>
+            </motion.div>
+          )}
+          {Object.entries(errors).length > 0 && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex gap-5 p-8 bg-red-100 rounded-md"
               layout
             >
-              <XCircleIcon className="size-9 text-red-700" />
+              <XCircleIcon className="text-red-700 size-9" />
               <div className="space-y-4">
                 <h3 className="text-red-700 font-display">
                   There were {Object.entries(errors).length} errors with your submission
                 </h3>
-                <ul className="pl-9 list-disc">
+                <ul className="list-disc pl-9">
                   {Object.entries(errors).map(([key, value]) => (
                     <li className="text-red-700" key={key}>
                       {value.message}
@@ -160,7 +218,7 @@ export default function GameForm({ categories, game }: GameFormProps) {
                 className="absolute top-5 right-5"
                 onClick={() => clearErrors()}
               >
-                <XMarkIcon className="size-6 text-red-300" />
+                <XMarkIcon className="text-red-300 size-6" />
               </button>
             </motion.div>
           )}
@@ -282,60 +340,16 @@ export default function GameForm({ categories, game }: GameFormProps) {
         </div>
         <div>
           <h6 className="text-xs text-slate-400">STATUS</h6>
-          <div className="flex gap-3">
-            <div className="space-x-2">
-              <input
-                {...register("status")}
-                className="peer/status"
-                id="published"
-                type="radio"
-                value="true"
-              />
-              <label className="text-sm text-slate-400" htmlFor="published">
-                Published
-              </label>
-            </div>
-            <div className="space-x-2">
-              <input
-                {...register("status")}
-                className="peer/status"
-                id="private"
-                type="radio"
-                value="false"
-              />
-              <label className="text-sm text-slate-400" htmlFor="private">
-                Private
-              </label>
-            </div>
+          <div className="flex items-center gap-3 pt-2">
+            <Radio {...register("status")} id="published" value="true" label="Published" />
+            <Radio {...register("status")} id="private" value="false" label="Private" />
           </div>
         </div>
         <div>
           <h6 className="text-xs text-slate-400">FEATURED</h6>
-          <div className="flex gap-3">
-            <div className="space-x-2">
-              <input
-                {...register("featured")}
-                className="peer/status"
-                id="featured"
-                type="radio"
-                value="true"
-              />
-              <label className="text-sm text-slate-400" htmlFor="featured">
-                Yes
-              </label>
-            </div>
-            <div className="space-x-2">
-              <input
-                {...register("featured")}
-                className="peer/status"
-                id="notFeatured"
-                type="radio"
-                value="false"
-              />
-              <label className="text-sm text-slate-400" htmlFor="notFeatured">
-                No
-              </label>
-            </div>
+          <div className="flex items-center gap-3 pt-2">
+            <Radio {...register("featured")} id="featured" value="true" label="Yes" />
+            <Radio {...register("featured")} id="not-featured" value="false" label="No" />
           </div>
         </div>
         <div className="flex flex-col gap-1">
@@ -345,6 +359,7 @@ export default function GameForm({ categories, game }: GameFormProps) {
               {...register("categoryId")}
               className="w-full px-3 py-2 appearance-none focus-visible:outline-none bg-inherit"
             >
+              <option value="">Please select a category</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.title}
@@ -354,13 +369,31 @@ export default function GameForm({ categories, game }: GameFormProps) {
             <ChevronDownIcon className="absolute -translate-y-1/2 size-4 right-2 top-1/2" />
           </div>
         </div>
-        <button
-          type="submit"
-          className="w-full px-6 py-2 text-sm uppercase border border-yellow-400 rounded-md bg-accent-gradient"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? <Spinner className="size-5 block mx-auto" /> : game ? "update" : "save"}
-        </button>
+        <div className="flex gap-3">
+          {game && (
+            <button
+              type="button"
+              className="w-full px-6 py-2 text-sm uppercase bg-red-500 border hover:opacity-80 border-red-600 rounded-md"
+              disabled={isSubmitting || upload.isUploading}
+              onClick={() => deleteGameBySlug(game.slug)}
+            >
+              Delete
+            </button>
+          )}
+          <button
+            type="submit"
+            className="w-full px-6 py-2 text-sm uppercase border border-yellow-400 rounded-md hover:opacity-80 bg-accent-gradient"
+            disabled={isSubmitting || upload.isUploading}
+          >
+            {isSubmitting || upload.isUploading ? (
+              <Spinner className="block mx-auto size-5" />
+            ) : game ? (
+              "update"
+            ) : (
+              "save"
+            )}
+          </button>
+        </div>
       </div>
     </form>
   );

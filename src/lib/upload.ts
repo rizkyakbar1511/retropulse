@@ -1,3 +1,5 @@
+import axios, { AxiosProgressEvent } from "axios";
+
 async function presignS3Url(fileName: string, fileType: string) {
   try {
     const response = await fetch("/api/upload/presigned-url", {
@@ -11,15 +13,18 @@ async function presignS3Url(fileName: string, fileType: string) {
   }
 }
 
-export async function uploadToS3(file: File, fileName: string) {
+export async function uploadToS3(
+  file: File,
+  fileName: string,
+  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
+) {
   try {
     const { signedUrl } = await presignS3Url(fileName, file.type);
-    const response = await fetch(signedUrl, {
+    const response = await axios.put(signedUrl, file, {
       headers: {
         "Content-Type": file.type,
       },
-      method: "PUT",
-      body: file,
+      onUploadProgress,
     });
     return response;
   } catch (error) {

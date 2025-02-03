@@ -1,6 +1,27 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { deleteS3File } from "@/lib/s3";
+import { redirect } from "next/navigation";
+
+export async function deleteGameBySlug(slug: string) {
+  try {
+    const res = await prisma.game.delete({
+      where: {
+        slug,
+      },
+    });
+
+    const gameUrlCID = res.game_url.split("/").at(-1) as string;
+    const thumbnailCID = res.image.split("/").at(-1) as string;
+
+    await deleteS3File(gameUrlCID);
+    await deleteS3File(thumbnailCID);
+  } catch (error) {
+    console.log("🚀 ~ deleteGame ~ error:", error);
+  }
+  redirect("/dashboard");
+}
 
 export async function upsertGame(formData: FormData) {
   const gameId = formData.get("id") as string;
@@ -36,7 +57,6 @@ export async function upsertGame(formData: FormData) {
       game_url: gameFile,
       image: thumbnail,
     };
-    console.log("🚀 ~ upsertGame ~ gameData:", gameData);
 
     const gameDataUpdate = {
       title,
@@ -52,7 +72,6 @@ export async function upsertGame(formData: FormData) {
       ...(gameFile ? { game_url: gameFile } : {}),
       ...(thumbnail ? { image: thumbnail } : {}),
     };
-    console.log("🚀 ~ upsertGame ~ gameDataUpdate:", gameDataUpdate);
 
     if (!gameId) {
       await prisma.game.create({ data: gameData });

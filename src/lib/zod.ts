@@ -40,9 +40,11 @@ export const baseGameSchema = z.object({
     .refine((value) => value !== null, {
       message: "Featured is required", // Custom message for `null`
     }),
-  categoryId: z.string({
-    required_error: "Category is required",
-  }),
+  categoryId: z
+    .string({
+      required_error: "Category is required",
+    })
+    .nonempty("Category is required"),
 });
 
 export const createGameSchema = baseGameSchema.extend({

@@ -1,3 +1,4 @@
+import AdminCategoryLists from "@/components/admin/category-lists";
 import AdminGameLists from "@/components/admin/game-lists";
 import Statistics from "@/components/admin/statistics";
 import { getAllGames, getConsoleCategories } from "@/services/game-service";
@@ -8,6 +9,7 @@ export default async function AdminDashboardPage() {
     <section className="container mx-auto p-4 space-y-5">
       <Statistics gamesCount={games.length} categoriesCount={categories.length} />
       <AdminGameLists games={games} />
+      <AdminCategoryLists categories={categories} />
     </section>
   );
 }

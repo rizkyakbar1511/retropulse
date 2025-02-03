@@ -33,17 +33,17 @@ export default function HeroSlider({ games }: HeroSliderProps) {
           <SwiperSlide
             style={{
               background: `linear-gradient(rgba(0, 0, 0, 0.5), rgb(5, 112, 247, 0.3)), url(${game.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
             }}
             key={game.id}
-            className={`r p-20 items-center !flex`}
+            className={`p-8 sm:p-20 items-center !flex !bg-center !bg-cover`}
           >
             <div className="max-w-3xl">
-              <h1 className="font-display text-4xl lg:text-6xl mb-4">{game.title}</h1>
-              <p className="mb-6 max-w-[418px] line-clamp-3">{game.description}</p>
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl mb-4">{game.title}</h1>
+              <p className="mb-6 max-w-[418px] line-clamp-3 text-sm sm:text-base">
+                {game.description}
+              </p>
               <Link
-                className="text-sm bg-accent-gradient py-3 px-6 rounded-xl border uppercase border-yellow-400"
+                className="text-sm bg-accent-gradient py-2 px-5 sm:py-3 sm:px-6 rounded-xl border uppercase border-yellow-400"
                 href={`/game/${game.slug}`}
               >
                 Play Now

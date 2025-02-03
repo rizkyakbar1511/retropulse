@@ -12,6 +12,9 @@ export const SWIPER_STYLES = {
 
 export const SWIPER_BREAKPOINTS: SwiperOptions["breakpoints"] = {
   320: {
+    slidesPerView: 2,
+  },
+  576: {
     slidesPerView: 3,
   },
   640: {

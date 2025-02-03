@@ -18,7 +18,7 @@ export default function Search() {
     setSearchTerm("");
   };
   return (
-    <form className="relative flex-1 max-w-md mx-auto" onSubmit={handleSearch}>
+    <form className="relative flex-1 max-w-md mx-auto hidden sm:block" onSubmit={handleSearch}>
       <MagnifyingGlassIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-white" />
       <input
         className="w-full rounded-lg bg-main border border-accent px-8 h-8  "
