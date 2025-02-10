@@ -22,3 +22,28 @@
     @apply cursor-pointer;
   }
 }
+
+.spinner-dots {
+  position: relative;
+}
+
+.spinner-dots span {
+  border-radius: 50%;
+  position: absolute;
+  height: 7px;
+  width: 7px;
+  background-color: #ffba08;
+  transform: rotate(calc(var(--i) * (360deg / 10))) translateY(10px);
+  animation: spinner-dots-animate 1s linear infinite;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes spinner-dots-animate {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
