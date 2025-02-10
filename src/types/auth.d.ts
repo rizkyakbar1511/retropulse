@@ -17,6 +17,11 @@ declare module "next-auth" {
        */
     } & DefaultSession["user"];
   }
+
+  interface User {
+    role: string;
+    image: string;
+  }
 }
 
 declare module "next-auth/jwt" {
