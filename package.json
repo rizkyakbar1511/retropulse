@@ -15,6 +15,7 @@
     "@auth/prisma-adapter": "^2.7.4",
     "@aws-sdk/client-s3": "^3.738.0",
     "@aws-sdk/s3-request-presigner": "^3.738.0",
+    "@biomejs/biome": "^1.9.4",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.10.0",
     "@neondatabase/serverless": "^0.10.4",
