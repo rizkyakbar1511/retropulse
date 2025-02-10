@@ -9,8 +9,9 @@ import { signInSchema } from "@/lib/zod";
 import { getUserByEmail } from "@/services/user-service";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/prisma";
+import { Adapter } from "@auth/core/adapters";
 
-const adapter = PrismaAdapter(prisma);
+const adapter = PrismaAdapter(prisma) as Adapter;
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter,
