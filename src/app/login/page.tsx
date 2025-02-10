@@ -1,4 +1,4 @@
-import Alert from "@/components/alert";
+import Alert from "@/components/alert-box";
 import CredentialsSignin from "@/components/credentials-signin";
 import Image from "next/image";
 import OAuthSignIn from "@/components/oauth-signin";
