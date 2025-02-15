@@ -10,6 +10,7 @@ export default function MobileNav() {
     <>
       {!isOpen ? (
         <button
+        type="button"
           className="lg:hidden"
           onClick={() => setIsOpen(true)}
           aria-expanded="false"
@@ -19,6 +20,7 @@ export default function MobileNav() {
         </button>
       ) : (
         <button
+        type="button"
           className="lg:hidden"
           onClick={() => setIsOpen(false)}
           aria-expanded="true"
@@ -32,7 +34,7 @@ export default function MobileNav() {
         <div className="fixed top-[57px] h-dvh left-0 right-0 z-50 bg-main p-4" id="mobile-menu">
           <ul className="flex flex-col mb-6">
             {MOBILE_NAV_ITEMS.map((item) => (
-              <li className="border-accent" key={item.name} role="none">
+              <li className="border-accent" key={item.name} >
                 <Link
                   className="text-lg font-medium hover:bg-accent rounded-md flex gap-4 items-center border-b border-accent py-4 px-6"
                   href={item.path}

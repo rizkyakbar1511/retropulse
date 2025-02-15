@@ -5,7 +5,7 @@ import { signUpSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import Spinner from "@/components/spinner";
 
 export default function CredentialsSignup() {
@@ -54,7 +54,7 @@ export default function CredentialsSignup() {
           Sign in
         </Link>
       </p>
-      <button className="px-6 py-3 w-full text-sm uppercase border border-yellow-400 bg-accent-gradient rounded-xl hover:opacity-80">
+      <button type="button" className="px-6 py-3 w-full text-sm uppercase border border-yellow-400 bg-accent-gradient rounded-xl hover:opacity-80">
         {isSubmitting ? <Spinner className="size-5 block mx-auto" /> : "Sign Up"}
       </button>
     </form>

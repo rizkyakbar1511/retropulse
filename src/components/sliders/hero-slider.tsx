@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Link from "next/link";
 import { SWIPER_STYLES } from "@/constants/swiper";
-import { Game } from "@prisma/client";
+import type { Game } from "@prisma/client";
 
 interface HeroSliderProps {
   games: Game[];
@@ -35,7 +35,7 @@ export default function HeroSlider({ games }: HeroSliderProps) {
               background: `linear-gradient(rgba(0, 0, 0, 0.5), rgb(5, 112, 247, 0.3)), url(${game.image})`,
             }}
             key={game.id}
-            className={`p-8 sm:p-20 items-center !flex !bg-center !bg-cover`}
+            className="p-8 sm:p-20 items-center !flex !bg-center !bg-cover"
           >
             <div className="max-w-3xl">
               <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl mb-4">{game.title}</h1>

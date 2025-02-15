@@ -2,7 +2,7 @@
 
 import { MAIN_MENU_ITEMS } from "@/constants/navigation";
 import { cn } from "@/lib/utils";
-import { Category, Game } from "@prisma/client";
+import type { Category, Game } from "@prisma/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ImageWithFallback from "@/components/image-with-fallback";

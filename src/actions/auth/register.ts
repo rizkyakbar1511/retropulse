@@ -1,10 +1,10 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { signUpSchema } from "@/lib/zod";
+import type { signUpSchema } from "@/lib/zod";
 import { createUser } from "@/services/user-service";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import type { z } from "zod";
 
 export async function registerUser(data: z.infer<typeof signUpSchema>) {
   const { name, email, password } = data;

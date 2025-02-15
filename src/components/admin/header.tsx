@@ -25,7 +25,7 @@ export default function AdminHeader() {
           <ArrowUpRightIcon className="size-4" />
         </Link>
         <form action={handleSignOut}>
-          <button className="flex items-center gap-2 px-2 py-1  ">
+          <button type="button" className="flex items-center gap-2 px-2 py-1  ">
             <ArrowRightStartOnRectangleIcon className="size-4" />
             Sign Out
           </button>

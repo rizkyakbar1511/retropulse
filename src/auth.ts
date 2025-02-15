@@ -9,7 +9,7 @@ import { signInSchema } from "@/lib/zod";
 import { getUserByEmail } from "@/services/user-service";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/prisma";
-import { Adapter } from "@auth/core/adapters";
+import type { Adapter } from "@auth/core/adapters";
 
 const adapter = PrismaAdapter(prisma) as Adapter;
 
@@ -49,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // },
   },
   jwt: {
-    encode: async function (params) {
+    encode: async (params) => {
       if (params.token?.credentials) {
         const sessionToken = uuid();
 
@@ -80,7 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { email, password } = await signInSchema.parseAsync(credentials);
         const user = await getUserByEmail(email);
 
-        const isPasswordValid = await compare(password, user.password!);
+        const isPasswordValid = await compare(password, user?.password ?? "");
 
         if (!isPasswordValid) throw new Error("Invalid password");
 

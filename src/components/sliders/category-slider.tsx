@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { SWIPER_BREAKPOINTS, SWIPER_STYLES } from "@/constants/swiper";
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 import Image from "next/image";
 
 export default function CategorySlider({ categories }: { categories: Category[] }) {

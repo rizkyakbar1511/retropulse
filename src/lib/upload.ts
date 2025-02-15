@@ -1,16 +1,12 @@
-import axios, { AxiosProgressEvent } from "axios";
+import axios, { type AxiosProgressEvent } from "axios";
 
 async function presignS3Url(fileName: string, fileType: string) {
-  try {
     const response = await fetch("/api/upload/presigned-url", {
       method: "POST",
       body: JSON.stringify({ fileName, fileType }),
     });
     const data = await response.json();
     return data;
-  } catch (error) {
-    throw error;
-  }
 }
 
 export async function uploadToS3(

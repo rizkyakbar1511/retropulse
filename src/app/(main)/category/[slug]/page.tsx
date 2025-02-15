@@ -15,7 +15,7 @@ export default async function CategorySlugPage({
 }) {
   const { slug } = await params;
   const { page } = await searchParams;
-  const pageParams = page ? parseInt(page) : 1;
+  const pageParams = page ? Number.parseInt(page) : 1;
   const { games, totalPages, currentPage } = await getGameByCategoryName(slug, pageParams);
 
   return (

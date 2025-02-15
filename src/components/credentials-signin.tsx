@@ -6,7 +6,7 @@ import Spinner from "@/components/spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "@/lib/zod";
-import { z } from "zod";
+import type { z } from "zod";
 
 export default function CredentialsSignin() {
   const {
@@ -23,8 +23,9 @@ export default function CredentialsSignin() {
     <form className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-4">
         <div className="flex flex-col gap-1">
-          <label className="text-xs lg:text-base">Email</label>
+          <label className="text-xs lg:text-base" htmlFor="email">Email</label>
           <input
+          id="email"
             {...register("email")}
             className="p-2 bg-black border rounded-md border-accent"
             type="email"
@@ -32,8 +33,9 @@ export default function CredentialsSignin() {
           {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs lg:text-base">Password</label>
+          <label className="text-xs lg:text-base" htmlFor="password">Password</label>
           <input
+          id="password"
             {...register("password")}
             className="p-2 bg-black border rounded-md border-accent"
             type="password"

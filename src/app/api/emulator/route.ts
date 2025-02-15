@@ -1,8 +1,8 @@
 // app/api/emulator/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 export async function GET(request: NextRequest) {
   const headersList = await headers();

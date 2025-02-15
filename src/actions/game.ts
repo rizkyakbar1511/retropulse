@@ -49,7 +49,7 @@ export async function upsertGame(formData: FormData) {
       description,
       categories: {
         connect: {
-          id: parseInt(categoryId, 10),
+          id: Number.parseInt(categoryId, 10),
         },
       },
       published: status,
@@ -64,7 +64,7 @@ export async function upsertGame(formData: FormData) {
       description,
       categories: {
         connect: {
-          id: parseInt(categoryId, 10),
+          id: Number.parseInt(categoryId, 10),
         },
       },
       published: status,
@@ -79,7 +79,7 @@ export async function upsertGame(formData: FormData) {
       await prisma.game.update({
         data: gameDataUpdate,
         where: {
-          id: parseInt(gameId, 10),
+          id: Number.parseInt(gameId, 10),
         },
       });
     }

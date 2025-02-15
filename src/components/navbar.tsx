@@ -12,7 +12,7 @@ export default async function Navbar() {
   const session = await getSession();
   return (
     <nav className="flex gap-3">
-      <button className="sm:hidden">
+      <button type="button" className="sm:hidden">
         <MagnifyingGlassIcon className="size-5 text-white" />
       </button>
       {!session?.user && (

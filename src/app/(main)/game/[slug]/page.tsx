@@ -1,6 +1,6 @@
 import GameEmulator from "@/components/game-emulator";
 import { getGameBySlug } from "@/services/game-service";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 type Params = Promise<{ slug: string }>;

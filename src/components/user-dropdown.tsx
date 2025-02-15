@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { type DefaultSession } from "next-auth";
+import type { DefaultSession } from "next-auth";
 import ImageWithFallback from "./image-with-fallback";
 import { cn, isAdmin } from "@/lib/utils";
 import Link from "next/link";
@@ -37,6 +37,7 @@ export default function UserDropdown({ user }: UserDropdownProps) {
   return (
     <div ref={menuRef} className="relative">
       <button
+        type="button"
         onClick={handleToggleMenu}
         className="rounded-full relative block size-6 overflow-hidden"
       >
@@ -80,7 +81,7 @@ export default function UserDropdown({ user }: UserDropdownProps) {
           </li>
         )}
         <li className="hover:bg-main py-2 px-4 text-sm">
-          <button onClick={() => signOut({ redirectTo: "/" })} className="flex items-center gap-1">
+          <button type="button" onClick={() => signOut({ redirectTo: "/" })} className="flex items-center gap-1">
             <ArrowRightStartOnRectangleIcon className="size-5" /> Sign Out
           </button>
         </li>

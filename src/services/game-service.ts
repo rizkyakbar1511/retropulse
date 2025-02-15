@@ -47,7 +47,7 @@ export async function getGameBySlug(slug: string) {
   });
 }
 
-export async function getGameByCategoryName(category: string, page: number = 1) {
+export async function getGameByCategoryName(category: string, page = 1) {
   const ITEMS_PER_PAGE = 20;
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
