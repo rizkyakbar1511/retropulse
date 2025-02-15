@@ -12,10 +12,11 @@ function s3ClientSingleton(): S3Client {
   });
 }
 
-declare const globalThisCustom: {
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+declare const globalThis: {
   s3ClientGlobal: ReturnType<typeof s3ClientSingleton>;
 } & typeof global;
 
-const s3Client = globalThisCustom.s3ClientGlobal ?? s3ClientSingleton();
+const s3Client = globalThis.s3ClientGlobal ?? s3ClientSingleton();
 
 export default s3Client;
