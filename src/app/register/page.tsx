@@ -43,7 +43,7 @@ export default async function RegisterPage() {
 					iconPath="/icons/github.svg"
 				/>
 				<OAuthSignIn
-					className="bg-slate-200"
+					className="bg-slate-200 text-black"
 					provider="google"
 					iconPath="/icons/google.svg"
 				/>
