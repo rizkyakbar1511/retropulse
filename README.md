@@ -37,9 +37,24 @@ Check out the live version here: [RetroPulse](https://retropulse.vercel.app)
    ```
 3. Set up environment variables (create a `.env.local` file):
    ```env
-   DATABASE_URL=your-neondb-url
+   ### Database
+   DATABASE_URL=your-db-url
+   DIRECT_URL=your-directdb-url
+
+   ### Authentication
+   WEBSITE_URL=your-host-url
    NEXTAUTH_SECRET=your-secret-key
-   FILEBASE_S3_BUCKET=your-filebase-bucket
+   AUTH_SECRET=your-generated-auth-secret-from-authjs
+   AUTH_GITHUB_ID=
+   AUTH_GITHUB_SECRET=
+
+   ### FILEBASE S3
+   S3_ENDPOINT=
+   S3_BUCKET_NAME=
+   S3_SECRET_ACCESS_KEY=
+   S3_ACCESS_KEY_ID=
+   S3_REGION=
+   S3_API_VERSION=
    ```
 4. Run the development server:
    ```sh
@@ -60,6 +75,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📬 Contact
 For any inquiries, reach out via:
-- GitHub: [@your-username](https://github.com/rizkyakbar1511)
+- GitHub: [@rizkyakbar1511](https://github.com/rizkyakbar1511)
 - Email: rizkyakbar1511@gmail.com
 
